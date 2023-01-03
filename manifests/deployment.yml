@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: deyvicarlosapipruebaaks 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deyvicarlosapipruebaaks
+  template:
+    metadata:
+      labels:
+        app: deyvicarlosapipruebaaks 
+    spec:
+      containers:
+        - name: deyvicarlosapipruebaaks 
+          image: contenedorrocksodastereo.azurecr.io/deyvicarlosapipruebaaks
+          ports:
+          - containerPort: 4000
