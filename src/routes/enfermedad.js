@@ -1,10 +1,10 @@
 import {Router} from 'express'
-import {obtenerEnfermedades} from '../controllers/enfermedadController.js'
+import {listarEnfermedades} from '../controllers/enfermedadController.js'
 
 const router = Router();
 
 
-router.get('/',obtenerEnfermedades);
+router.get('/',listarEnfermedades);
 
 
 export default router;

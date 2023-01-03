@@ -1,10 +1,10 @@
 import {Router} from 'express'
-import {obtenerCategorias} from '../controllers/categoriaController.js'
+import {listarCategorias} from '../controllers/categoriaController.js'
 
 const router = Router();
 
 
-router.get('/',obtenerCategorias);
+router.get('/',listarCategorias);
 
 
 export default router;

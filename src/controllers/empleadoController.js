@@ -2,7 +2,7 @@
 import {pool} from '../db.js';
 import bcrypt from 'bcrypt'
 
-export const crearEmpleado = async (req,res) =>{
+export const registarEmpleado = async (req,res) =>{
     try{
         const {nombre,email,telefono,direccion,password,rol} = req.body;
 
@@ -73,7 +73,7 @@ export const crearEmpleado = async (req,res) =>{
 //     }
 // }
 
-export const obtenerEmpleados = async (req, res) =>{
+export const listarEmpleados = async (req, res) =>{
     try{
         console.log("metodo de listar empleados")
         //rows arreglo de objetos
