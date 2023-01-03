@@ -4,11 +4,11 @@ import {registarEmpleado,eliminarEmpleado,obtenerEmpleado,listarEmpleados} from 
 const router = Router();
 
 
-// router.post('/', registarEmpleado);
+router.post('/', registarEmpleado);
 router.get('/',listarEmpleados);
 router.delete('/:id', eliminarEmpleado);
 router.get('/:id',obtenerEmpleado);
-//router.put('/:id',editarDatosPersonales);
-//router.get('/miperfil',miperfil);
+// router.put('/:id',editarDatosPersonales);
+// router.get('/miperfil',miperfil);
 
 export default router;

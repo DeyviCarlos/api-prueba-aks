@@ -7,7 +7,7 @@ const router = Router();
 router.get('/',listarVentas);
 router.get('/miscompras/:id',misCompras);
 router.put('/cambiar-estado-entrega/:id',cambiarEstadoEntrega);
-// router.post('/:id',registarCompra);
+router.post('/:id',registarCompra);
 
 
 export default router;
