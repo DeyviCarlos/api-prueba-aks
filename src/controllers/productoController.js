@@ -17,8 +17,11 @@ export const listarProductos = async(req, res) =>{
 
 export const buscarProductoxCategoria = async(req, res) =>{
     try{
-        const {categoria} = req.body
-        const [rows] = await pool.query('CALL sp_buscarProductoxCategoria(?,?)', [req.params.id,categoria]);
+        
+        const {id} = req.params
+
+        console.log(id)
+        const [rows] = await pool.query('CALL busca_productoxcateg(?)', [id]);
 
         if(rows[0].length <= 0){
             res.status(404).json({mensaje: 'Productos no entontrados', data: []});
@@ -33,9 +36,8 @@ export const buscarProductoxCategoria = async(req, res) =>{
 
 export const buscarProductoxEnfermedad = async(req, res) =>{
     try{
-        const {enfermedad} = req.body
-
-        const [rows] = await pool.query('CALL sp_buscarProductoxEnfermedad(?,?)', [req.params.id,enfermedad]);
+        const {id} = req.params
+        const [rows] = await pool.query('CALL busca_productoxenfermedad(?)', [id]);
 
         if(rows[0].length <= 0){
             res.status(404).json({mensaje: 'Productos no entontrados', data: []});
