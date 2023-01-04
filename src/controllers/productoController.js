@@ -67,5 +67,21 @@ export const buscarProductoxNombre = async(req, res) =>{
     }
 }
 
+export const obtenerProducto = async(req, res) =>{
+    try{
+        console.log(req.params)
+        const {id} = req.params
 
+        const [rows] = await pool.query('CALL sp_buscarProductoxId(?)', [id]);
+
+        if(rows[0].length <= 0){
+            res.status(404).json({mensaje: 'Producto no entontrado', data: []});
+        }
+
+        return res.status(200).json({mensaje: 'Producto encontrado',data: rows[0]});
+
+    }catch(error){
+        return res.status(500).json({mensaje: 'Error al buscar al producto'});
+    }
+}
 

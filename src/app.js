@@ -9,6 +9,7 @@ import categoriaRoute from './routes/categoria.js'
 import enfermedadRoute from './routes/enfermedad.js'
 import tipoEntregaRoute from './routes/tipo_entrega.js'
 import ventaRoute from './routes/venta.js'
+import pasarelaRoute from './routes/pasarela.js'
 
 const app = express()
 
@@ -23,11 +24,12 @@ app.use(cors(corsOptions))
 
 app.use('/api/empleados',empleadoRoute)
 app.use('/api/productos',productoRoute)
-app.use('api/auth',authRoute)
+app.use('/api/auth',authRoute)
 app.use('/api/categorias',categoriaRoute)
 app.use('/api/enfermedades',enfermedadRoute)
 app.use('/api/tipo-entrega',tipoEntregaRoute)
-app.use('api/ventas',ventaRoute)
+app.use('/api/ventas',ventaRoute)
+app.use('/api/pasarela',pasarelaRoute)
 
 app.get('/api', (req,res) =>{
     res.json({mensaje: "bienvenido"})
