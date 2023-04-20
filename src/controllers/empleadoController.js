@@ -2,6 +2,7 @@
 import {pool} from '../db.js';
 import bcrypt from 'bcrypt'
 
+//sistema
 export const registarEmpleado = async (req,res) =>{
     try{
         const {nombre,email,telefono,direccion,password,rol} = req.body;
@@ -73,6 +74,7 @@ export const registarEmpleado = async (req,res) =>{
 //     }
 // }
 
+//sistema
 export const listarEmpleados = async (req, res) =>{
     try{
         console.log("metodo de listar empleados")
@@ -91,7 +93,7 @@ export const listarEmpleados = async (req, res) =>{
         return res.status(500).json({mensaje: 'Error al listar Empledos',error: error});
     }
 }
-
+//sistema
 export const obtenerEmpleado = async(req, res) =>{
     try{
         const [rows] = await pool.query('CALL sp_obtenerEmpleado(?)', [req.params.id]);

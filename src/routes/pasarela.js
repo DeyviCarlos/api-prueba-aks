@@ -1,12 +1,13 @@
 import {Router} from 'express'
-import {createOrder,capturarOrder,cancelarOrder} from '../controllers/pasarelaController.js'
+import {createOrder,notificacionOrden} from '../controllers/pasarelaController.js'
+import { verifyToken } from '../middlewars/authMiddlewar.js';
 
 const router = Router();
 
 
-router.get('/create-orden',createOrder);
-router.get('/capturar-orden',capturarOrder);
-
-router.get('/cancel-order',cancelarOrder);
+router.post('/createorden',verifyToken,createOrder);
+router.post('/notificacion/:id',notificacionOrden)
+// router.get('/capturar-orden',capturarOrder);
+// router.get('/cancel-order',cancelarOrder);
 
 export default router;

@@ -1,10 +1,10 @@
 import {Router} from 'express'
-import { listarTipoEntrega } from '../controllers/tipoentregaController.js';
+import { listarTipoEntrega,registrarTipoEntrega } from '../controllers/tipoentregaController.js';
 
 const router = Router();
 
 
 router.get('/',listarTipoEntrega);
-
+router.post('/',registrarTipoEntrega);
 
 export default router;
