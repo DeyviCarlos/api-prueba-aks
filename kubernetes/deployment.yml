@@ -1,1 +1,19 @@
-
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: deyvicarlosapipruebaaks 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sananatural
+  template:
+    metadata:
+      labels:
+        app: sananatural 
+    spec:
+      containers:
+        - name: contenedorSanaNatural
+          image: contenedorregistrosananatural.azurecr.io/sananatural
+          ports:
+          - containerPort: 4000
