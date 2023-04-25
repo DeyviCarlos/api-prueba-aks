@@ -67,6 +67,8 @@ stages:
           secretType: 'dockerRegistry'
           secretName: '$(imagePullSecret)'
           dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+      - script: dir $(Build.SourcesDirectory)/manifests
+        displayName: Cloning Manifest Files From Repo
       - task: KubernetesManifest@1
         inputs:
           action: 'deploy'
