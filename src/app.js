@@ -3,7 +3,7 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
 import path from 'path'
-import { fileURLToPath } from 'url'
+// import { fileURLToPath } from 'url'
 import multer from 'multer'
 
 
@@ -41,7 +41,7 @@ app.use(cors(corsOptions))
 // app.use(express.static(path.join(__dirname, '../public')));
 
 //config de multer ------------------------------------------------------------------------
-//de manera locar genera el public
+//de manera local genera el public
 // const storage = multer.diskStorage({
 //     destination: path.join(__dirname,'../public/uploads'),
 //     filename: (req,file,cb) => {

@@ -1,6 +1,20 @@
 import {pool,db} from '../db.js';
 import mysql from 'mysql2/promise';
 
+import {blobServiceClient,containerReport,DOMINIOFILE} from '../config.js'
+
+
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+import fs from 'fs'
+import pdf from 'html-pdf' 
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+
+
 //Registrar compra : falta completar
 export const registarCompra = async(req, res) =>{
 
@@ -145,6 +159,74 @@ export const cambiarEstadoEntrega = async(req, res) =>{
     }catch(error){
         return res.status(500).json({mensaje: 'Error al cambiar de estado de entrega',error: error});
     }
+}
+
+export const generarReporte = async(req,res) => {
+
+    try{
+        const id_orden = req.params.orden
+        console.log("N° orden: ",id_orden)
+
+        //plantilla
+        let html = fs.readFileSync(path.join(__dirname, '../tpl/plantilla.html'), 'utf8');
+        
+        //obtener la venta por su id venta
+
+        //obtener el detalle de la venta
+
+        console.log("HTML: ",html)
+        //remplasar valores
+        html = html.replace("{{idOrden}}", id_orden);
+
+
+        const f=new Date()
+        var fecha_archivo=f.toLocaleDateString().replaceAll('/','-')
+        var archivo_generado="./reportes/orden_"+id_orden+"_"+fecha_archivo+".pdf";
+        var archivo_generado_azure="reportes/orden_"+id_orden+"_"+fecha_archivo+".pdf";
+        console.log("HTML: ",html)
+        
+        pdf.create(html).toFile(archivo_generado, (error) => {
+            if (error) return res.status(500).json({mensaje:"Error al obtener el reporte", status: "500"})
+            else
+                console.log("PDF creado"); // { filename: '/app/businesscard.pdf' }
+        });
+        
+        setTimeout(()=>{
+            azurePdf(archivo_generado_azure);
+            return res.status(200).json({mensaje:"reporte generado", reportepdf: DOMINIOFILE+archivo_generado_azure})
+        },4000) 
+    }catch(error){
+        return res.status(500).json({mensaje:"Error al obtener el reporte", status: "500"})
+    }
+}
+
+ const azurePdf = async (archivo_generado_azure) => {
+    try{
+            //subiendo pdf a Azure      
+            const containerClient = blobServiceClient.getContainerClient(containerReport);
+
+            console.log("container Azure: ",containerClient)
+
+            // Crear el contenedor si no existe
+            const createContainerResponse = await containerClient.createIfNotExists();
+            if(!createContainerResponse) console.log("ya existe el contenedor")
+            
+            const filePath = path.join(__dirname, "../../"+archivo_generado_azure);
+            console.log("Ruta del archivo: ",filePath)
+            // Leer el archivo
+            const fileContent = fs.readFileSync(filePath);
+            console.log("Contenido del Archivo:  ",fileContent)
+            // Obtener el nombre del archivo sin la ruta
+            const fileName = path.basename(filePath);
+            console.log("Nombre del archivo:  ",fileName)
+            // Subir el archivo al contenedor
+            const blockBlobClient = containerClient.getBlockBlobClient(fileName);
+            const uploadResponse = await blockBlobClient.upload(fileContent, fileContent.length);
+
+            console.log("Respuesta de subida de archivo:",uploadResponse)
+    }catch(err){
+        console.log(err)
+    }  
 }
 
 

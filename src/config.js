@@ -1,6 +1,10 @@
 import { config } from "dotenv";
 // import {ShareServiceClient} from '@azure/storage-file-share'
+//conexion 1
 import azureStorage from 'azure-storage'
+
+//conexion 2
+import { BlobServiceClient } from "@azure/storage-blob";
 
 config()
 
@@ -60,7 +64,12 @@ export const getBlobName = originalName => {
     return `${identifier}-${originalName}`;
 };
 
+//configuración para subir los pdf a azure
+export const blobServiceClient = BlobServiceClient.fromConnectionString(process.env.AZURE_STORAGE_CONNECTION_STRING);
+export const containerReport= "reportes";
 
+
+export const DOMINIOFILE=process.env.DOMINIOFILE
 
 /*paypal*/
 // export const PAYPAL_API_CLIENT = 'AQyxvbC5hQALoo3GkeatkLLOp31MZS3FfVsWlmf8qudXvbDM-BPFFkrO1Wj1_tCbq6Ng5L7VT7xAaPmr'
