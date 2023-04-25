@@ -40,7 +40,7 @@ stages:
           $(tag)
     - task: PublishPipelineArtifact@1
       inputs:
-        targetPath: 'manifests'
+        targetPath: 'kubernetes'
         artifact: 'manifests'
         publishLocation: 'pipeline'
 
@@ -74,5 +74,5 @@ stages:
           kubernetesServiceConnection: 'aks-sana-natural-default'
           namespace: 'default'
           manifests: |
-            $(Pipeline.Workspace)/s/manifests/deployment.yml
-            $(Pipeline.Workspace)/s/manifests/service.yml
+            $(Pipeline.Workspace)/manifests/deployment.yml
+            $(Pipeline.Workspace)/manifests/service.yml
