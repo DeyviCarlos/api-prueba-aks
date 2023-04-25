@@ -74,5 +74,5 @@ stages:
           kubernetesServiceConnection: 'aks-sana-natural-default'
           namespace: 'default'
           manifests: |
-            $(System.DefaultWorkingDirectory)/manifests/deployment.yml
-            $(System.DefaultWorkingDirectory)/manifests/service.yml
+            $(Pipeline.Workspace)/s/manifests/deployment.yml
+            $(Pipeline.Workspace)/s/manifests/service.yml
