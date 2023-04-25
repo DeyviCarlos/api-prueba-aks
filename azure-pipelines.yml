@@ -40,9 +40,9 @@ stages:
           $(tag)
     - task: PublishPipelineArtifact@1
       inputs:
-          targetPath: '$(System.DefaultWorkingDirectory)/manifests'
-          artifact: 'manifests'
-          publishLocation: 'pipeline'
+        targetPath: 'manifests'
+        artifact: 'manifests'
+        publishLocation: 'pipeline'
 
 - stage: Deploy
   displayName: Deploy to Dev
