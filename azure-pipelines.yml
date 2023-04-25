@@ -67,8 +67,6 @@ stages:
           secretType: 'dockerRegistry'
           secretName: '$(imagePullSecret)'
           dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
-      - script: dir $(Build.SourcesDirectory)/manifests
-        displayName: Cloning Manifest Files From Repo
       - task: KubernetesManifest@1
         inputs:
           action: 'deploy'
@@ -76,5 +74,5 @@ stages:
           kubernetesServiceConnection: 'aks-sana-natural-default'
           namespace: 'default'
           manifests: |
-            $(Pipeline.Workspace)/manifests/deployment.yml
-            $(Pipeline.Workspace)/manifests/service.yml
+            $(System.DefaultWorkingDirectory)/manifests/deployment.yml
+            $(System.DefaultWorkingDirectory)/manifests/service.yml
