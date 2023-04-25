@@ -43,6 +43,7 @@ stages:
           targetPath: '$(System.DefaultWorkingDirectory)/manifests'
           artifact: 'manifests'
           publishLocation: 'pipeline'
+
 - stage: Deploy
   displayName: Deploy to Dev
   dependsOn: Build
@@ -75,6 +76,3 @@ stages:
           manifests: |
             $(Pipeline.Workspace)/manifests/deployment.yml
             $(Pipeline.Workspace)/manifests/service.yml
-          imagePullSecrets: '$(imagePullSecret)'
-          containers: |
-            $(containerRegistry)/$(imageRepository):$(tag)
