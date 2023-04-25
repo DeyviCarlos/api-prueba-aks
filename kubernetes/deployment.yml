@@ -1,19 +1,19 @@
 apiVersion : apps/v1
 kind: Deployment
 metadata:
-  name: sananatural 
+  name: sananatural-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: sananatural
+      app: sananatural-deployment
   template:
     metadata:
       labels:
-        app: sananatural 
+        app: sananatural-deployment
     spec:
       containers:
-        - name: sananatural
+        - name: sananatural-server
           image: contenedorregistrosananatural.azurecr.io/sananatural
           ports:
-          - containerPort: 4000
+            - containerPort: 4000
