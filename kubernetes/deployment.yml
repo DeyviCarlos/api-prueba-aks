@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: sananatural-deployment
 spec:
+  progressDeadlineSeconds: 3600
   replicas: 1
   selector:
     matchLabels:
