@@ -13,7 +13,6 @@ export const iniciarSesion = async(req, res) =>{
         if(usuario[0].length <= 0){
             return res.status(400).json('Usuario o contraseña incorrecta');  
         }
-
         // console.log("usuario correcto: ",usuario[0][0].nombre_cliente)
         const passwordValido = await bcrypt.compare(contrasenia,usuario[0][0].contrasenia_cliente)
 
@@ -33,12 +32,11 @@ export const iniciarSesion = async(req, res) =>{
             }
         );
         
-        res.cookie("jwt", jwtToken, {
-            httpOnly: true,
-            maxAge: 24*60*60*1000, //24hrs
-          }
-        );
-
+        // res.cookie("jwt", jwtToken, {
+        //     httpOnly: true,
+        //     maxAge: 24*60*60*1000, //24hrs
+        //   }
+        // );
         res.json(
             {
                 mensaje: "Se inició sesión",
@@ -89,10 +87,10 @@ export const registarCliente = async(req, res) =>{
               expiresIn: '24h',
             }
         );
-        res.cookie("jwt", jwtToken, {
-            httpOnly: true,
-            maxAge: 24*60*60*1000, // 3hrs in ms
-        });
+        // res.cookie("jwt", jwtToken, {
+        //     httpOnly: true,
+        //     maxAge: 24*60*60*1000, // 3hrs in ms
+        // });
 
         res.json({
             mensaje: 'Usuario registrado correctamente',
