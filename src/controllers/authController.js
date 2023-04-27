@@ -92,7 +92,7 @@ export const registarCliente = async(req, res) =>{
         //     maxAge: 24*60*60*1000, // 3hrs in ms
         // });
 
-        res.json({
+        return res.status(201).json({
             mensaje: 'Usuario registrado correctamente',
             jwtToken
         });

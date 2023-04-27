@@ -59,10 +59,10 @@ export const createOrder = async(req, res) => {
     console.log("Ordenes: ",ordenes)
     let preference = {
       items: ordenes,
-      notification_url: `https://006e-2800-200-eae0-a88-48ff-b12e-10b-a1cf.ngrok.io/api/pasarela/notificacion/${idOrden}`
+      notification_url: `https://apimsananatural.azure-api.net/api/pasarela/notificacion/${idOrden}`
       ,
       back_urls: {
-        success: 'http://localhost:4200/mis-compras',
+        success: 'https://sananatural.azurewebsites.net/mis-compras',
         failure: '',
         pending: ''
       },
@@ -79,7 +79,7 @@ export const createOrder = async(req, res) => {
     await connection.commit();
 
     console.log("Mercado Response:",resmercadopago)
-    return res.status(200).json({data: resmercadopago})
+    return res.status(201).json({data: resmercadopago})
     // res.redirect(data.body.init_point)
   }catch(error){
     await connection.rollback();
