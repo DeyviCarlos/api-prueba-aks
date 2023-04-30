@@ -3,7 +3,6 @@ import mysql from 'mysql2/promise';
 
 import {blobServiceClient,containerReport,DOMINIOFILE} from '../config.js'
 
-
 import path from 'path'
 import { fileURLToPath } from 'url'
 
@@ -192,8 +191,15 @@ export const generarReporte = async(req,res) => {
         });
         
         setTimeout(()=>{
-            azurePdf(archivo_generado_azure);
-            return res.status(200).json({mensaje:"reporte generado", reportepdf: DOMINIOFILE+archivo_generado_azure})
+            let rutaPdf = ""
+            azurePdf(archivo_generado_azure).then(response => {
+                rutaPdf = response;
+                console.log("ruta: ",rutaPdf)
+                res.set('Content-Type', 'application/pdf')
+                return res.status(200).json({mensaje: "Reporte",ruta: rutaPdf})
+            }).catch( error => {
+                return res.status(500).json({mensaje:"Error al obtener el reporte", status: "500"})
+            });
         },4000) 
     }catch(error){
         return res.status(500).json({mensaje:"Error al obtener el reporte", status: "500"})
@@ -219,16 +225,45 @@ export const generarReporte = async(req,res) => {
             // Obtener el nombre del archivo sin la ruta
             const fileName = path.basename(filePath);
             console.log("Nombre del archivo:  ",fileName)
-            // Subir el archivo al contenedor
+            // Subir el archivo al contenedor en Azure
             const blockBlobClient = containerClient.getBlockBlobClient(fileName);
             const uploadResponse = await blockBlobClient.upload(fileContent, fileContent.length);
-
             console.log("Respuesta de subida de archivo:",uploadResponse)
+            
+            fs.unlink(filePath, (err) => {
+                if (err) {
+                  console.error(err);
+                  return;
+                }
+              
+                console.log('Archivo temporal eliminado correctamente');
+            });
+
+            //obtener el PDF del contenedor en Azure para mostrar
+            const blobName = fileName;
+            const blobClient = containerClient.getBlobClient(blobName);
+
+            const response = await blobClient.download();
+            const buffer = await streamToBuffer(response.readableStreamBody);
+            // fs.writeFileSync('./reportes/'+fileName, buffer);
+            console.log("Buffer:",buffer)
+            return containerClient.url+"/"+fileName;
     }catch(err){
         console.log(err)
     }  
 }
 
-
+const streamToBuffer = async (readableStream) => {
+    return new Promise((resolve, reject) => {
+      const chunks = [];
+      readableStream.on("data", (data) => {
+        chunks.push(data instanceof Buffer ? data : Buffer.from(data));
+      });
+      readableStream.on("end", () => {
+        resolve(Buffer.concat(chunks));
+      });
+      readableStream.on("error", reject);
+    });
+  };
 
 

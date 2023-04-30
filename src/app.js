@@ -3,7 +3,7 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
 import path from 'path'
-// import { fileURLToPath } from 'url'
+import { fileURLToPath } from 'url'
 import multer from 'multer'
 
 
@@ -35,10 +35,10 @@ app.use(cookieParser())
 app.use(cors(corsOptions))
 
 
-//Static files
-// const __filename = fileURLToPath(import.meta.url)
-// const __dirname = path.dirname(__filename)
-// app.use(express.static(path.join(__dirname, '../public')));
+// Static files
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+app.use(express.static(path.join(__dirname, '../reportes')));
 
 //config de multer ------------------------------------------------------------------------
 //de manera local genera el public

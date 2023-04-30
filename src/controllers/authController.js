@@ -63,7 +63,7 @@ export const registarCliente = async(req, res) =>{
         console.log(usuario)
 
         if(usuario[0].length > 0){
-            return res.status(404).json({mensaje: "Usuario ya existe"})
+            return res.status(404).json({mensaje: "El Correo ya existe"})
         }
 
         const contraseniaEncrip = await bcrypt.hash(contrasenia,10);
