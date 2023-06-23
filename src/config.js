@@ -13,12 +13,17 @@ export const PORT= process.env.PORT || 4000
 export const HOST= process.env.HOST || 'localhost'
 
 
-//BD
+//BD MYSQL
 export const DB_name = process.env.DB_name || 'sana_natural'
 export const DB_hostname = process.env.DB_hostname || 'localhost'
 export const DB_username = process.env.DB_username || 'root'
 export const DB_password = process.env.DB_password || ''
 export const DB_port = process.env.DB_port || 3306
+
+//BD Redis
+export const BD_HOST_REDIS = process.env.BD_HOST_REDIS
+export const BD_PORT_REDIS = process.env.BD_PORT_REDIS
+
 //conexión a ssl de la BD local
 // export const BD_SSL= process.env.BD_SSL
 //conexión a ssl de la BD en Azure

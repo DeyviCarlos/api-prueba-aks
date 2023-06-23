@@ -182,6 +182,7 @@ export const generarReporte = async(req,res) => {
         var fecha_archivo=f.toLocaleDateString().replaceAll('/','-')
         var archivo_generado="./reportes/orden_"+id_orden+"_"+fecha_archivo+".pdf";
         var archivo_generado_azure="reportes/orden_"+id_orden+"_"+fecha_archivo+".pdf";
+        var nombre_archivopdf = "orden_"+id_orden+"_"+fecha_archivo+".pdf"
         console.log("HTML: ",html)
         
         pdf.create(html).toFile(archivo_generado, (error) => {
@@ -196,7 +197,7 @@ export const generarReporte = async(req,res) => {
                 rutaPdf = response;
                 console.log("ruta: ",rutaPdf)
                 res.set('Content-Type', 'application/pdf')
-                return res.status(200).json({mensaje: "Reporte",ruta: rutaPdf})
+                return res.status(200).json({mensaje: "Reporte",ruta: rutaPdf, nombre: nombre_archivopdf})
             }).catch( error => {
                 return res.status(500).json({mensaje:"Error al obtener el reporte", status: "500"})
             });
@@ -245,9 +246,9 @@ export const generarReporte = async(req,res) => {
 
             const response = await blobClient.download();
             const buffer = await streamToBuffer(response.readableStreamBody);
-            // fs.writeFileSync('./reportes/'+fileName, buffer);
+            fs.writeFileSync('./reportes/'+fileName, buffer);
             console.log("Buffer:",buffer)
-            return containerClient.url+"/"+fileName;
+            return "http://localhost:4000/"+fileName;
     }catch(err){
         console.log(err)
     }  
@@ -264,6 +265,23 @@ const streamToBuffer = async (readableStream) => {
       });
       readableStream.on("error", reject);
     });
-  };
+};
 
+export const eliminarReporte = async(req,res) => {
 
+    try{
+        const nombreArchivo = req.params.nombre
+        console.log("Nombre del pdf: ",nombreArchivo)
+        const filePath = path.join(__dirname, "../../reportes/"+nombreArchivo);    
+        console.log("ruta de archivo a eliminar", filePath)
+        fs.unlink(filePath, (err) => {
+            if (err) {
+              console.error(err);
+              return res.status(400).json({mensaje:"No se encontró el reporte", status: "500"});
+            }
+            return res.status(200).json({mensaje:'Archivo temporal eliminado correctamente'})
+        });
+    }catch(error){
+        return res.status(500).json({mensaje:"Error al eliminar el reporte", status: "500"})
+    }
+}
