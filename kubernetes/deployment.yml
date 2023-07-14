@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
         - name: sananatural-server
-          image: contenedorregistrosananatural.azurecr.io/sananatural
+          image: sananaturalcontainer.azurecr.io/sananatural
           ports:
             - containerPort: 4000
