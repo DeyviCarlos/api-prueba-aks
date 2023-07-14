@@ -196,8 +196,10 @@ export const generarReporte = async(req,res) => {
             azurePdf(archivo_generado_azure).then(response => {
                 rutaPdf = response;
                 console.log("pdf descargado:: ",rutaPdf)
-                res.set({'Content-Type': 'application/pdf',
-                'Content-Disposition': `attachment; filename=${nombre_archivopdf}`})
+                // res.set({'Content-Type': 'application/pdf',
+                // 'Content-Disposition': `attachment; filename=${nombre_archivopdf}`})
+                res.set('Content-Disposition',`attachment; filename=${nombre_archivopdf}`);
+                res.set('Content-Type', 'application/pdf');
                 response.readableStreamBody.pipe(res);
             }).catch( error => {
                 return res.status(500).json({mensaje:"Error al obtener el reporte", status: "500"})
@@ -253,11 +255,27 @@ export const generarReporte = async(req,res) => {
 
             //obtener el PDF del contenedor en Azure para mostrar
             const blobName = fileName;
+            //forma probada en local funcional, pero en nube no funcional
             const blobClient = containerClient.getBlobClient(blobName);
-
             const response = await blobClient.download();
-
             return response;
+
+            //segunda forma por probar
+            // const downloadResponse = await blockBlobClient.download();
+            // const text = await streamToString(downloadResponse.readableStreamBody);
+            // const options = { format: 'Letter' };
+            // pdf.create(text, options).toStream((err, stream) => {
+            //   if (err) {
+            //     console.log('Error al generar el archivo PDF:', err);
+            //     res.status(500).send('Error al generar el archivo PDF');
+            //     return;
+            //   }
+
+              
+            //   res.set('Content-Disposition', 'attachment; filename="report.pdf"');
+            //   res.set('Content-Type', 'application/pdf');
+            //   stream.pipe(res);
+            // });
     }catch(err){
         console.log(err)
     }  
