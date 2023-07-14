@@ -1,0 +1,82 @@
+# Docker
+# Build and push an image to Azure Container Registry
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- main
+
+resources:
+- repo: self
+
+variables:
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: '32641743-8c77-4116-863e-f7f9b0c26924'
+  imageRepository: 'sananatural'
+  containerRegistry: 'sananaturalcontainer.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  tag: '$(Build.BuildId)'
+  imagePullSecret: 'contenedorregistrosananaturalauth'
+
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+
+stages:
+- stage: Build
+  displayName: Build and push stage
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: 'kubernetes'
+        artifact: 'manifests'
+        publishLocation: 'pipeline'
+
+- stage: Deploy
+  displayName: Deploy to Dev
+  dependsOn: Build
+  jobs:
+    - job: Deploy
+      displayName: Deploy to AKS
+      pool: 
+        vmImage: $(vmImageName)
+      steps:
+      - task: DownloadPipelineArtifact@2
+        inputs:
+          buildType: 'current'
+          artifactName: 'manifests'
+          targetPath: '$(Pipeline.Workspace)/manifests'
+      - task: KubernetesManifest@1
+        inputs:
+          action: 'createSecret'
+          connectionType: 'kubernetesServiceConnection'
+          kubernetesServiceConnection: 'aks-sana-natural-default'
+          namespace: 'default'
+          secretType: 'dockerRegistry'
+          secretName: '$(imagePullSecret)'
+          dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+      - task: KubernetesManifest@1
+        inputs:
+          action: 'deploy'
+          connectionType: 'kubernetesServiceConnection'
+          kubernetesServiceConnection: 'aks-sana-natural-default'
+          namespace: 'default'
+          manifests: |
+            $(Pipeline.Workspace)/manifests/deployment.yml
+            $(Pipeline.Workspace)/manifests/service.yml
+          imagePullSecrets: |
+            $(imagePullSecret)
+          containers: |
+            $(containerRegistry)/$(imageRepository):$(tag)
