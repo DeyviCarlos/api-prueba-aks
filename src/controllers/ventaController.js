@@ -198,7 +198,7 @@ export const generarReporte = async(req,res) => {
                 console.log("pdf descargado:: ",rutaPdf)
                 res.set({'Content-Type': 'application/pdf',
                 'Content-Disposition': `attachment; filename=${nombre_archivopdf}`})
-                return res.status(200).json({mensaje: "Reporte",ruta: rutaPdf, nombre: nombre_archivopdf})
+                response.readableStreamBody.pipe(res);
             }).catch( error => {
                 return res.status(500).json({mensaje:"Error al obtener el reporte", status: "500"})
             });
