@@ -285,3 +285,41 @@ export const eliminarReporte = async(req,res) => {
         return res.status(500).json({mensaje:"Error al eliminar el reporte", status: "500"})
     }
 }
+
+export const infoApi = async(req,res) => {
+
+    const rutaArchivo = path.join(__dirname, '../../ejemplo.json');
+    
+
+    fs.readFile(rutaArchivo, 'utf8', (error, data) => {
+        if (error) {
+            console.error('Error al leer el archivo:', error);
+            return;
+        }
+
+        try {
+            // Convertir el contenido del archivo JSON a un objeto JavaScript
+            const jsonData = JSON.parse(data);
+
+            // Hacer algo con los datos
+            console.log(jsonData);
+            return res.status(201).json({data: jsonData, status:201})
+        } catch (error) {
+            console.error('Error al parsear el archivo JSON:', error);
+            return res.status(500).json({ mensaje: error })
+        }
+    });
+
+
+    // const arregloObjetos = jsonDataApellidos.map((valor, indice) => {
+    //     return {
+    //       Apellidos: valor,
+    //       Descrip_multa: Descrip_multa[indice],
+    //       Descrip_fijo: Descrip_fijo[indice],
+    //       Dif_agua: Dif_agua[indice],
+    //       Dif_luz: Dif_luz[indice],
+    //     };
+    //   });
+      
+    //   console.log(arregloObjetos);
+}
