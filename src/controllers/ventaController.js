@@ -195,8 +195,9 @@ export const generarReporte = async(req,res) => {
             let rutaPdf = ""
             azurePdf(archivo_generado_azure).then(response => {
                 rutaPdf = response;
-                console.log("ruta: ",rutaPdf)
-                res.set('Content-Type', 'application/pdf')
+                console.log("pdf descargado:: ",rutaPdf)
+                res.set({'Content-Type': 'application/pdf',
+                'Content-Disposition': `attachment; filename=${nombre_archivopdf}`})
                 return res.status(200).json({mensaje: "Reporte",ruta: rutaPdf, nombre: nombre_archivopdf})
             }).catch( error => {
                 return res.status(500).json({mensaje:"Error al obtener el reporte", status: "500"})
@@ -241,14 +242,22 @@ export const generarReporte = async(req,res) => {
             });
 
             //obtener el PDF del contenedor en Azure para mostrar
+            // const blobName = fileName;
+            // const blobClient = containerClient.getBlobClient(blobName);
+
+            // const response = await blobClient.download();
+            // const buffer = await streamToBuffer(response.readableStreamBody);
+            // fs.writeFileSync('./reportes/'+fileName, buffer);
+            // console.log("Buffer:",buffer)
+            // return "http://localhost:4000/"+fileName;
+
+            //obtener el PDF del contenedor en Azure para mostrar
             const blobName = fileName;
             const blobClient = containerClient.getBlobClient(blobName);
 
             const response = await blobClient.download();
-            const buffer = await streamToBuffer(response.readableStreamBody);
-            fs.writeFileSync('./reportes/'+fileName, buffer);
-            console.log("Buffer:",buffer)
-            return "http://localhost:4000/"+fileName;
+
+            return response;
     }catch(err){
         console.log(err)
     }  
