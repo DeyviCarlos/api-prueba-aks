@@ -186,7 +186,7 @@ export const generarReporte = async(req,res) => {
         console.log("HTML: ",html)
         
         pdf.create(html).toFile(archivo_generado, (error) => {
-            if (error) return res.status(500).json({mensaje:"Error al obtener el reporte", status: "500"})
+            if (error) return res.status(500).json({mensaje:"Error al obtener el reporte", status: "500", error: error})
             else
                 console.log("PDF creado"); // { filename: '/app/businesscard.pdf' }
         });
@@ -202,11 +202,11 @@ export const generarReporte = async(req,res) => {
                 res.set('Content-Type', 'application/pdf');
                 response.readableStreamBody.pipe(res);
             }).catch( error => {
-                return res.status(500).json({mensaje:"Error al obtener el reporte", status: "500"})
+                return res.status(500).json({mensaje:"Error al obtener el reporte", status: "500", erorr: error})
             });
         },4000) 
     }catch(error){
-        return res.status(500).json({mensaje:"Error al obtener el reporte", status: "500"})
+        return res.status(500).json({mensaje:"Error al obtener el reporte", status: "500", error: error})
     }
 }
 
